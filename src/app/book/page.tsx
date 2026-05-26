@@ -166,7 +166,7 @@ function DoctorSelectionDirectory() {
                 className="flex flex-col items-center gap-4 rounded-3xl bg-[rgba(255,255,255,0.85)] p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-[rgba(12,86,81,0.08)] transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[rgba(15,107,99,0.3)]"
               >
                 <div className="h-24 w-24 overflow-hidden rounded-full bg-slate-100 ring-4 ring-[rgba(15,107,99,0.1)] shadow-sm">
-                   <img src={doc.img} alt={doc.name} className="h-full w-full object-cover" />
+                   <img src={doc.img} alt={doc.name} className="h-full w-full object-cover object-top" />
                 </div>
                 <div className="text-center flex-1">
                   <h3 className="font-semibold text-lg text-[var(--accent-strong)]">{doc.name}</h3>
