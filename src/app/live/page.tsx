@@ -64,7 +64,7 @@ export default function LivePage() {
   const [pharmacyWaitingCount, setPharmacyWaitingCount] = useState(0);
 
   useEffect(() => {
-    if (activeClinicId !== "pharmacy") return;
+    if ((activeClinicId as string) !== "pharmacy") return;
     
     let mounted = true;
     const fetchPharmacyRx = async () => {
@@ -171,32 +171,32 @@ export default function LivePage() {
         <main className="grid flex-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_24rem]">
           <section className="live-token-shadow rounded-[32px] border border-[rgba(255,255,255,0.1)] bg-[rgba(15,107,99,0.05)] p-6 sm:p-10 backdrop-blur-[20px]">
             <p className="text-sm font-extrabold uppercase tracking-[0.2em] text-[#00ffcc] drop-shadow-[0_0_8px_rgba(0,255,204,0.5)]">
-              {activeClinicId === "pharmacy" ? "Ready To Collect" : t("live", "currentToken")}
+              {(activeClinicId as string) === "pharmacy" ? "Ready To Collect" : t("live", "currentToken")}
             </p>
             <div className={`mt-6 rounded-[32px] ${
-              (activeClinicId === "pharmacy" ? pharmacyReady?.token : current?.token) === myToken 
+              ((activeClinicId as string) === "pharmacy" ? pharmacyReady?.token : current?.token) === myToken 
                 ? "bg-[linear-gradient(180deg,#3a3000,#725f00)] shadow-[0_0_40px_rgba(255,215,0,0.3)] border-2 border-[#ffd700]" 
                 : "bg-[linear-gradient(180deg,#00513f,#002118)] shadow-[0_0_30px_rgba(0,255,204,0.15)] border border-[#00ffcc]"
             } px-8 py-12 relative overflow-hidden`}>
               {/* Glass reflection effect */}
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.1)_0%,transparent_50%)] rounded-[32px] pointer-events-none" />
               
-              {(activeClinicId === "pharmacy" ? pharmacyReady?.token : current?.token) === myToken && (
+              {((activeClinicId as string) === "pharmacy" ? pharmacyReady?.token : current?.token) === myToken && (
                 <div className="absolute top-4 right-6 rounded-full bg-[#ffd700] px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#221b00] shadow-[0_0_20px_rgba(255,215,0,0.8)] animate-pulse">
                   ⭐ It's Your Turn!
                 </div>
               )}
               <p className="display-type text-[5rem] flex items-center gap-4 leading-none sm:text-[7rem] lg:text-[9.5rem] font-black tracking-tighter text-[#fdfffc] drop-shadow-md">
-                {activeClinicId !== "pharmacy" && current?.isReportCheck && <span className="text-[#00ffcc] opacity-90 text-[4rem] sm:text-[6rem] lg:text-[8rem]">🔄</span>}
-                {activeClinicId === "pharmacy" 
+                {(activeClinicId as string) !== "pharmacy" && current?.isReportCheck && <span className="text-[#00ffcc] opacity-90 text-[4rem] sm:text-[6rem] lg:text-[8rem]">🔄</span>}
+                {(activeClinicId as string) === "pharmacy" 
                   ? (pharmacyReady?.token ?? "---") 
                   : (current?.token ?? `${activeClinic.prefix}-000`)}
               </p>
               <p className="mt-4 flex items-center gap-2 text-2xl font-bold text-[#a2f1e6]">
-                {activeClinicId === "pharmacy"
+                {(activeClinicId as string) === "pharmacy"
                   ? (pharmacyReady?.name ?? "No Medicines Ready")
                   : (current?.name ?? t("live", "queuePreparing"))}
-                {activeClinicId !== "pharmacy" && current?.isReportCheck && <span className="rounded-full bg-[#00ffcc]/20 px-3 py-1 text-xs font-bold text-[#00ffcc] uppercase tracking-wider">Report Check</span>}
+                {(activeClinicId as string) !== "pharmacy" && current?.isReportCheck && <span className="rounded-full bg-[#00ffcc]/20 px-3 py-1 text-xs font-bold text-[#00ffcc] uppercase tracking-wider">Report Check</span>}
               </p>
             </div>
 
@@ -204,30 +204,30 @@ export default function LivePage() {
               <div className="rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(25,33,30,0.6)] p-6 backdrop-blur-md relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle,#00ffcc_0%,transparent_70%)] opacity-10 pointer-events-none" />
                 <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#83958d]">
-                  {activeClinicId === "pharmacy" ? "Next Ready" : t("live", "nextToken")}
+                  {(activeClinicId as string) === "pharmacy" ? "Next Ready" : t("live", "nextToken")}
                 </p>
                 <p className="mt-3 flex items-center gap-2 text-[3.5rem] leading-none font-black text-[#dbe5df]">
-                  {activeClinicId !== "pharmacy" && summary.next?.isReportCheck && <span className="text-[#00ffcc] opacity-80 text-[2.5rem]">🔄</span>}
-                  {activeClinicId === "pharmacy"
+                  {(activeClinicId as string) !== "pharmacy" && summary.next?.isReportCheck && <span className="text-[#00ffcc] opacity-80 text-[2.5rem]">🔄</span>}
+                  {(activeClinicId as string) === "pharmacy"
                     ? (pharmacyNext?.token ?? "--")
                     : (summary.next?.token ?? "--")}
                 </p>
                 <p className="mt-2 flex items-center gap-2 text-base font-medium text-[#b9cbc2]">
-                  {activeClinicId === "pharmacy"
+                  {(activeClinicId as string) === "pharmacy"
                     ? (pharmacyNext?.name ?? "--")
                     : (summary.next?.name ?? "--")}
-                  {activeClinicId !== "pharmacy" && summary.next?.isReportCheck && <span className="rounded-full bg-[#00ffcc]/10 px-2 py-0.5 text-[9px] font-bold text-[#00ffcc] uppercase tracking-wider">Report</span>}
+                  {(activeClinicId as string) !== "pharmacy" && summary.next?.isReportCheck && <span className="rounded-full bg-[#00ffcc]/10 px-2 py-0.5 text-[9px] font-bold text-[#00ffcc] uppercase tracking-wider">Report</span>}
                 </p>
               </div>
               <div className="rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(25,33,30,0.6)] p-6 backdrop-blur-md relative overflow-hidden">
                 <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#83958d]">
-                  {activeClinicId === "pharmacy" ? "Preparing" : t("live", "queueCount")}
+                  {(activeClinicId as string) === "pharmacy" ? "Preparing" : t("live", "queueCount")}
                 </p>
                 <p className="mt-3 text-[3.5rem] leading-none font-black text-[#dbe5df]">
-                  {activeClinicId === "pharmacy" ? pharmacyWaitingCount : summary.waiting.length}
+                  {(activeClinicId as string) === "pharmacy" ? pharmacyWaitingCount : summary.waiting.length}
                 </p>
                 <p className="mt-2 text-base font-medium text-[#b9cbc2]">
-                  {activeClinicId === "pharmacy" ? "Prescriptions" : t("live", "patientsWaiting")}
+                  {(activeClinicId as string) === "pharmacy" ? "Prescriptions" : t("live", "patientsWaiting")}
                 </p>
               </div>
             </div>
