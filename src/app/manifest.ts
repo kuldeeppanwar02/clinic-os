@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Dr SR Panwar Clinic",
-    short_name: "Dr SR Panwar",
+    name: "Renwal Multi-Speciality Hospital",
+    short_name: "RMH Clinic",
     description:
       "Hindi-first multi-clinic PWA — appointment booking, walk-in token, live queue status aur staff dashboard.",
     start_url: "/",

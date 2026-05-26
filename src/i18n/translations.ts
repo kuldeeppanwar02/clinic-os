@@ -19,7 +19,7 @@ export const translations = {
   },
 
   common: {
-    appName: { hi: "पंवार स्मार्टकेयर हब", en: "Panwar SmartCare Hub" },
+    appName: { hi: "रेणवाल मल्टी-स्पेशियलिटी हॉस्पिटल", en: "RMH Clinic OS" },
     online: { hi: "ऑनलाइन", en: "Online" },
     offline: { hi: "ऑफलाइन", en: "Offline" },
     loading: { hi: "लोड हो रहा है...", en: "Loading..." },
@@ -71,8 +71,8 @@ export const translations = {
       en: "Book appointment or get walk-in token",
     },
     tagline: {
-      hi: "Dr. Satta Ram Panwar Clinic, Dhandev Dental Clinic & Associated Pharmacy",
-      en: "Dr. Satta Ram Panwar Clinic, Dhandev Dental Clinic & Associated Pharmacy",
+      hi: "रेणवाल मल्टी-स्पेशियलिटी हॉस्पिटल, ऑर्थोपेडिक्स, सर्जरी, मेडिसिन और यूरोलॉजी",
+      en: "Renwal Multi-Speciality Hospital, Orthopaedics, Surgery, Medicine & Urology",
     },
     bookBtn: { hi: "अपॉइंटमेंट बुक करें", en: "Book Appointment" },
     bookBtnTitle: { hi: "अपॉइंटमेंट बुक करें", en: "Book Appointment" },

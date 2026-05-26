@@ -81,9 +81,12 @@ export function Navbar() {
   const router = useRouter();
   const { activeClinicId, activeClinic, isOnline } = useClinic();
   const { lang, toggleLang, t } = useLang();
-  const [session, setSession] = useState<StaffSession>(() => getStaffSession());
+  const [session, setSession] = useState<StaffSession>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    setSession(getStaffSession());
     const handleStorage = () => setSession(getStaffSession());
     window.addEventListener("storage", handleStorage);
     window.addEventListener("staff-session-change", handleStorage);
@@ -143,7 +146,7 @@ export function Navbar() {
     : [];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgba(247,239,225,0.88)] backdrop-blur-xl pt-[env(safe-area-inset-top)]">
+    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgba(255,255,255,0.72)] backdrop-blur-2xl pt-[env(safe-area-inset-top)]">
       {/* Main bar */}
       <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-3 px-4 py-2.5">
         {/* Logo */}
@@ -151,7 +154,7 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-2 font-semibold text-[var(--accent-strong)]"
         >
-          <img src="/logo-wide.png" alt="Panwar Health Care" className="h-8 w-auto sm:h-9 object-contain drop-shadow-sm" />
+          <img src="/rmh-logo.webp" alt="Renwal Multi-Speciality Hospital" className="h-8 w-auto sm:h-9 object-contain drop-shadow-sm" />
         </Link>
 
         {/* Clinic Switcher — desktop */}
@@ -172,7 +175,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop nav (patient) */}
-        {!session && (
+        {mounted && !session && (
           <nav className="hidden items-center gap-0.5 lg:flex">
             {patientLinks.map((item) => (
               <Link
@@ -217,7 +220,7 @@ export function Navbar() {
             {lang === "hi" ? "EN" : "हि"}
           </button>
 
-          {!session && (
+          {mounted && !session && (
             <a
               href="tel:+919636243621"
               className="flex items-center gap-1.5 rounded-full bg-[rgba(15,107,99,0.1)] px-3 py-1.5 text-xs font-bold text-[var(--accent-strong)] transition-colors hover:bg-[rgba(15,107,99,0.2)] border border-[rgba(15,107,99,0.2)]"
@@ -228,7 +231,7 @@ export function Navbar() {
             </a>
           )}
 
-          {session && (
+          {mounted && session && (
             <div className="hidden items-center gap-1.5 sm:flex">
               <span className="badge badge-booking">
                 {session.role === "doctor" ? "👨‍⚕️" : "👤"} {session.name}

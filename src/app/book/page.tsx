@@ -94,7 +94,7 @@ function buildWhatsAppUrl(clinic: string, token: string, day: string, slot: stri
     `📋 टोकन: ${token}\n` +
     `🏥 क्लिनिक: ${clinic}\n` +
     `📅 ${day} · ${slot}\n\n` +
-    `Panwar SmartCare Hub`
+    `RMH Clinic OS`
   );
   return `https://wa.me/?text=${msg}`;
 }

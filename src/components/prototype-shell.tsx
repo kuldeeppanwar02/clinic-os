@@ -37,7 +37,7 @@ export function PrototypeShell({
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div>
               <Link href="/" className="display-type text-2xl text-[var(--accent-strong)]">
-                PANWAR SMARTCARE HUB
+                RMH CLINIC OS
               </Link>
               <p className="mt-1 text-sm text-[rgba(19,49,58,0.68)]">
                 Hindi-first multi-clinic queue, booking aur pharmacy-ready PWA

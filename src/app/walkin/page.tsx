@@ -197,7 +197,7 @@ export default function WalkInPage() {
                   <div className="mt-4 flex flex-wrap justify-center gap-2">
                     <a
                       href={`https://wa.me/?text=${encodeURIComponent(
-                        `🏥 मेरा वॉक-इन टोकन!\n\n📋 टोकन: ${confirmation.token}\n🏥 क्लिनिक: ${activeClinic.shortName}\n⏱️ Wait: ~${confirmation.waitMinutes} min\n\nPanwar SmartCare Hub`
+                        `🎉 आपका वॉक-इन टोकन बुक हो गया!\n\n📋 टोकन: ${confirmation.token}\n🏥 क्लिनिक: ${activeClinic.shortName}\n⏳ Wait: ~${confirmation.waitMinutes} min\n\nRMH Clinic OS`
                       )}`}
                       target="_blank" rel="noopener noreferrer"
                       className="btn btn-sm" style={{background:'#25D366',color:'white'}}>

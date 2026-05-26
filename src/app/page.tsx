@@ -99,7 +99,7 @@ export default function HomePage() {
   const isDoctor = session?.role === "doctor";
   const isStaff = session?.role === "staff";
   const isLoggedIn = isDoctor || isStaff;
-  const heroTitle = lang === "hi" ? "पंवार हेल्थ केयर" : "PANWAR HEALTH CARE";
+  const heroTitle = lang === "hi" ? "रेणवाल मल्टी-स्पेशियलिटी हॉस्पिटल" : "RENWAL MULTI-SPECIALITY HOSPITAL";
 
 
 
@@ -425,7 +425,6 @@ function FocusedClinicCard({
   t: (section: TranslationKey, key: string) => string;
   settings?: any;
 }) {
-  const isSurgeryClinic = clinic.id === "surgery";
   const trustPoints = TRUST_POINTS[clinic.id];
   const schedule = useClinicSchedule(clinic.id);
   const isWalkInDisabled = schedule.status === "on_leave";
@@ -434,32 +433,31 @@ function FocusedClinicCard({
     <div className="card-elevated overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.78)]">
       <div className="p-4 sm:p-6">
         <div className="flex flex-row items-center sm:items-start gap-4 sm:gap-6">
-          {/* Doctor Profile Image - Option 1 (Left Side) */}
-          {isSurgeryClinic && (
-            <div className="flex-shrink-0">
-              <div className="relative h-[110px] w-[110px] sm:h-40 sm:w-40 rounded-full border-[3.5px] sm:border-[4px] border-white shadow-[0_8px_25px_rgba(15,107,99,0.22)] sm:shadow-[0_15px_35px_rgba(15,107,99,0.25)] overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                <img 
-                  src="/dr-panwar-circle.png" 
-                  alt="Dr. Sattaram Panwar" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          <div className="flex-shrink-0">
+            <div className="relative h-[90px] w-[90px] sm:h-32 sm:w-32 rounded-[24px] sm:rounded-[32px] border-[1px] border-[rgba(0,0,0,0.08)] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+              <img 
+                src={`/doctor/${
+                  clinic.id === 'ortho' ? 'dr_r_p_samota.webp' : 
+                  clinic.id === 'surgery' ? 'dr_ml_didel.webp' : 
+                  clinic.id === 'medicine' ? 'dr_rajesh.webp' : 
+                  clinic.id === 'urology' ? 'dr_nishkarsh.webp' : 
+                  'dr_pankaj.webp'
+                }`}
+                alt={settings?.doctorName || clinic.title} 
+                className="w-full h-full object-cover object-top"
+              />
             </div>
-          )}
+          </div>
 
           <div className="min-w-0 flex-1">
-            <h2 className="display-type text-[1.35rem] leading-[1.1] tracking-tighter text-[#17130f] sm:mt-1 sm:text-[2.5rem] break-words">
+            <h2 className="display-type text-[1.35rem] leading-[1.1] tracking-tighter text-[#17130f] sm:mt-1 sm:text-[2.25rem] break-words font-semibold">
               {settings?.doctorName || clinic.title}
             </h2>
 
             <div
-              className={`mt-2 sm:mt-3 inline-flex w-full sm:max-w-3xl rounded-[16px] sm:rounded-[20px] px-3 py-2 sm:px-4 sm:py-2.5 text-left shadow-[0_10px_20px_rgba(183,138,63,0.12)] sm:shadow-[0_14px_32px_rgba(183,138,63,0.16)] ${
-                isSurgeryClinic
-                  ? "bg-[linear-gradient(135deg,#b99043,#d9bc73)] text-white"
-                  : "bg-[linear-gradient(135deg,rgba(15,107,99,0.12),rgba(15,107,99,0.2))] text-[var(--accent-strong)]"
-              }`}
+              className="mt-2 sm:mt-3 inline-flex w-full sm:max-w-3xl rounded-[12px] sm:rounded-[16px] px-3 py-2 sm:px-4 sm:py-2 text-left bg-[#f5f5f7] border border-[#e5e5ea]"
             >
-              <p className="w-full text-[11px] font-semibold sm:font-medium leading-snug sm:text-[1.2rem] sm:leading-7">
+              <p className="w-full text-[13px] font-medium sm:font-medium leading-snug sm:text-[1.1rem] sm:leading-7 text-[#1d1d1f]">
                 {clinic.subtitle}
               </p>
             </div>

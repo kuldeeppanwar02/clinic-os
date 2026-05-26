@@ -33,15 +33,15 @@ const hindiFont = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Dr SR Panwar Clinic | Smart Appointment & Queue PWA",
+  title: "Renwal Multi-Speciality Hospital | Clinic OS PWA",
   description:
     "Hindi-first multi-clinic PWA with appointment booking, QR walk-in token, staff dashboard aur live queue status.",
-  applicationName: "Dr SR Panwar",
+  applicationName: "RMH Clinic OS",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Dr SR Panwar",
+    title: "RMH Clinic OS",
     startupImage: "/logo.png",
   },
   icons: {
