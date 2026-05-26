@@ -87,3 +87,9 @@ export function isClinicId(id: string | null | undefined): id is ClinicId {
   if (!id) return false;
   return CLINICS.some((c) => c.id === id);
 }
+
+export function buildClinicHref(path: string, clinicId: string | null): string {
+  if (!clinicId) return path;
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}clinic=${clinicId}`;
+}
