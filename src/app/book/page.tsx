@@ -14,8 +14,10 @@ import {
   AlertTriangle,
   Pill,
   Loader2,
+  ArrowRight,
 } from "lucide-react";
-import { buildClinicHref } from "@/features/clinic/catalog";
+import { CLINICS, buildClinicHref } from "@/features/clinic/catalog";
+import { useSearchParams } from "next/navigation";
 import { useClinic } from "@/features/clinic/state/clinic-provider";
 import { useLang } from "@/i18n/lang-provider";
 
@@ -131,7 +133,69 @@ type DayAvailability = {
   shiftGroups: ShiftGroup[];
 };
 
+function DoctorSelectionDirectory() {
+  const { lang, t } = useLang();
+  
+  return (
+    <div className="page-shell">
+      <section className="section-shell pt-8 pb-10">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-[var(--accent-strong)]">
+            {lang === "hi" ? "अपना डॉक्टर चुनें" : "Select Your Doctor"}
+          </h1>
+          <p className="mt-2 text-[rgba(19,49,58,0.7)]">
+            {lang === "hi" ? "ओपीडी अपॉइंटमेंट बुक करने के लिए कृपया विभाग चुनें" : "Please choose a department to book your OPD appointment"}
+          </p>
+        </div>
+        
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          {CLINICS.map((clinic) => {
+            const map: Record<string, {img: string, name: string}> = {
+              ortho: { img: "/doctor/dr_r_p_samota.webp", name: "Dr. R P Samota" },
+              surgery: { img: "/doctor/dr_ml_didel.webp", name: "Dr. M L Didel" },
+              medicine: { img: "/doctor/dr_rajesh.webp", name: "Dr. Rajesh Bochaliya" },
+              urology: { img: "/doctor/dr_nishkarsh.webp", name: "Dr. Nishkarsh Mehta" },
+              anaesthesia: { img: "/doctor/dr_pankaj.webp", name: "Dr. Pankaj Saini" },
+            };
+            const doc = map[clinic.id] || { img: "/logo.png", name: "Specialist" };
+            
+            return (
+              <Link
+                key={clinic.id}
+                href={`/book?clinic=${clinic.id}`}
+                className="flex flex-col items-center gap-4 rounded-3xl bg-[rgba(255,255,255,0.85)] p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-[rgba(12,86,81,0.08)] transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[rgba(15,107,99,0.3)]"
+              >
+                <div className="h-24 w-24 overflow-hidden rounded-full bg-slate-100 ring-4 ring-[rgba(15,107,99,0.1)] shadow-sm">
+                   <img src={doc.img} alt={doc.name} className="h-full w-full object-cover" />
+                </div>
+                <div className="text-center flex-1">
+                  <h3 className="font-semibold text-lg text-[var(--accent-strong)]">{doc.name}</h3>
+                  <p className="text-sm text-[rgba(19,49,58,0.6)] font-medium mt-1">{clinic.title}</p>
+                </div>
+                <div className="mt-4 w-full py-2.5 rounded-xl bg-[rgba(15,107,99,0.08)] text-[var(--accent)] font-semibold text-sm flex items-center justify-center gap-2 transition-colors hover:bg-[var(--accent)] hover:text-white">
+                  {lang === "hi" ? "बुक करें" : "Book Appointment"} <ArrowRight className="h-4 w-4" />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function BookPage() {
+  const searchParams = useSearchParams();
+  const hasClinic = searchParams.has("clinic");
+  
+  if (!hasClinic) {
+    return <DoctorSelectionDirectory />;
+  }
+  
+  return <BookPageInner />;
+}
+
+function BookPageInner() {
   const { activeClinic, activeClinicId, createBooking, syncInFlight, state } = useClinic();
   const { t } = useLang();
 
