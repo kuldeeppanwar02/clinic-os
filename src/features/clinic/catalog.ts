@@ -62,14 +62,14 @@ export const CLINICS: ClinicDefinition[] = [
     slug: "anaesthesia",
     shortName: "Anaesthesia",
     title: "Dr. Pankaj Saini",
-    subtitle: "DNB Orthopaedics — Critical Care & OPD",
+    subtitle: "DNB Anaesthesia — Critical Care & Pain Management",
     metaLine: "Consultant Anaesthetist & Critical Care",
     prefix: "A",
     phone: "01424294545",
     locationLabel: "Renwal Multi-Speciality Hospital",
     hoursLabel: "Daily OPD",
     accentColor: "#8b5cf6",
-    hasBooking: false,
+    hasBooking: true,
   },
 ];
 
