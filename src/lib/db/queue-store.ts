@@ -50,8 +50,6 @@ type QueueEntryRow = {
   created_at: string | Date;
   updated_at: string | Date;
   notes: string | null;
-  requires_pharmacy_follow_up: boolean;
-  pharmacy_status: "not-needed" | "pending" | "done";
 };
 
 type PendingSyncEntry = {
@@ -64,7 +62,6 @@ type PendingSyncEntry = {
   slotLabel: string;
   provisionalToken?: string;
   provisionalBookingId?: string;
-  requiresPharmacyFollowUp?: boolean;
 };
 
 function sanitizeMobile(value: string) {
@@ -76,10 +73,6 @@ function padSequence(value: number) {
 }
 
 function getBookingIdPrefix(clinicId: ClinicId, source: QueueSource) {
-  if (clinicId === "pharmacy") {
-    return "RX";
-  }
-
   return source === "booking" ? "BK" : "WI";
 }
 
@@ -120,8 +113,6 @@ function mapQueueEntry(row: QueueEntryRow): QueueEntry {
     updatedAt: toIsoString(row.updated_at),
     notes: row.notes?.replace("[REPORT_CHECK]", "")?.trim() || undefined,
     isReportCheck: row.notes?.includes("[REPORT_CHECK]") ?? false,
-    requiresPharmacyFollowUp: row.requires_pharmacy_follow_up,
-    pharmacyStatus: row.pharmacy_status,
   };
 }
 
@@ -139,9 +130,7 @@ function normalizeClinicState(
     clinicPrefix: clinicDocument?.clinic_prefix ?? clinic.prefix,
     doctorMessage:
       clinicDocument?.doctor_message ??
-      (clinicId === "pharmacy"
-        ? "Medicines aur follow-up pickup ke liye token lein."
-        : "Appointment aur walk-in dono available hain."),
+      "Appointment aur walk-in dono available hain.",
     lastUpdated: clinicDocument ? toIsoString(clinicDocument.last_updated) : new Date().toISOString(),
     lastSyncedAt: clinicDocument
       ? toIsoString(clinicDocument.last_synced_at)
@@ -213,9 +202,7 @@ async function readClinicQueueFrom(sql: QueryableDb, clinicId: ClinicId) {
       sync_state,
       created_at,
       updated_at,
-      notes,
-      requires_pharmacy_follow_up,
-      pharmacy_status
+      notes
     from queue_entries
     where clinic_id = ${clinicId}
     order by queue_order asc
@@ -295,8 +282,6 @@ function createQueueEntry(
       notes: input.provisionalToken
         ? `Synced from ${input.provisionalToken}`
         : null,
-      requires_pharmacy_follow_up: Boolean(input.requiresPharmacyFollowUp),
-      pharmacy_status: input.requiresPharmacyFollowUp ? "pending" : "not-needed",
     } satisfies QueueEntryRow,
     nextClinicDocument: {
       ...clinicDocument,
@@ -430,9 +415,7 @@ async function upsertRemoteEntries(clinicId: ClinicId, entries: PendingSyncEntry
           sync_state,
           created_at,
           updated_at,
-          notes,
-          requires_pharmacy_follow_up,
-          pharmacy_status
+          notes
         )
         values (
           ${entry.id},
@@ -450,9 +433,7 @@ async function upsertRemoteEntries(clinicId: ClinicId, entries: PendingSyncEntry
           ${entry.sync_state},
           ${entry.created_at},
           ${entry.updated_at},
-          ${entry.notes},
-          ${entry.requires_pharmacy_follow_up},
-          ${entry.pharmacy_status}
+          ${entry.notes}
         )
       `;
 
@@ -492,7 +473,6 @@ export async function createRemoteBooking(input: CreateBookingInput) {
       mobile: input.mobile,
       dayLabel: input.dayLabel,
       slotLabel: input.slotLabel,
-      requiresPharmacyFollowUp: input.requiresPharmacyFollowUp,
     },
   ]);
 }
@@ -508,8 +488,7 @@ export async function createRemoteWalkIn(input: CreateWalkInInput) {
       name: input.name?.trim() || "Walk-in Patient",
       mobile: input.mobile ?? "",
       dayLabel: "Aaj",
-      slotLabel: clinic.id === "pharmacy" ? "Pickup" : "Walk-in",
-      requiresPharmacyFollowUp: input.requiresPharmacyFollowUp,
+      slotLabel: "Walk-in",
     },
   ]);
 }
@@ -747,15 +726,11 @@ export async function rescheduleRemoteQueueEntry(clinicId: ClinicId, entryId: st
       update queue_entries
       set
         day_label = 'Kal',
-        slot_label = ${clinicId === "pharmacy" ? "Pickup" : "11:30 AM"},
+        slot_label = '11:30 AM',
         status = 'waiting',
         queue_order = ${nextQueueOrder},
         updated_at = ${updateTimestamp},
-        notes = ${
-          clinicId === "pharmacy"
-            ? "Medicine pickup kept for next availability."
-            : "Kal 11:30 AM par rescheduled"
-        }
+        notes = 'Kal 11:30 AM par rescheduled'
       where id = ${entryId}
     `;
 

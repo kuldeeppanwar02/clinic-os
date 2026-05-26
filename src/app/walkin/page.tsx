@@ -22,7 +22,7 @@ export default function WalkInPage() {
   const { t } = useLang();
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
-  const [requiresPharmacyFollowUp, setRequiresPharmacyFollowUp] = useState(activeClinicId === "pharmacy");
+
   const [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState<WalkInConfirmation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,7 +61,6 @@ export default function WalkInPage() {
         clinicId: activeClinicId,
         name,
         mobile,
-        requiresPharmacyFollowUp,
       });
       const latestEntry = nextState.queue[nextState.queue.length - 1];
       const position = getEntryPosition(nextState, latestEntry.id);
@@ -136,15 +135,7 @@ export default function WalkInPage() {
                   </label>
                 </div>
 
-                {activeClinicId !== "pharmacy" && (
-                  <label className="card flex items-center gap-2.5 px-3 py-2.5 text-sm text-[rgba(19,49,58,0.65)] cursor-pointer">
-                    <input type="checkbox" checked={requiresPharmacyFollowUp}
-                      onChange={(e) => setRequiresPharmacyFollowUp(e.target.checked)}
-                      className="h-4 w-4 accent-[var(--accent)]" />
-                    <Pill className="h-4 w-4 text-[var(--accent)]" />
-                    {t("walkin", "pharmacyFollowUp")}
-                  </label>
-                )}
+
 
                 {error && (
                   <div className="flex items-center gap-2 rounded-xl bg-[var(--danger-soft)] px-3 py-2">

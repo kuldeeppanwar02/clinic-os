@@ -5,7 +5,7 @@ import { getDb, toIsoString } from "@/lib/supabase/db";
 import { serverEnv } from "@/config/server-env";
 import type { ClinicId } from "@/features/clinic/types";
 
-export type StaffRole = "doctor" | "staff" | "pharmacist";
+export type StaffRole = "doctor" | "staff";
 
 export type StaffMember = {
   id: string;
@@ -111,27 +111,7 @@ export async function verifyPin(
     }
   }
 
-  if (serverEnv.pharmacy.pin && trimmedPin === serverEnv.pharmacy.pin) {
-    const now = new Date().toISOString();
 
-    return {
-      member: {
-        id: "pharmacist-pharmacy",
-        name: serverEnv.pharmacy.name || "Pharmacist",
-        role: "pharmacist",
-        pinHash: hashPin(trimmedPin),
-        phone: "",
-        email: "",
-        designation: "Pharmacist",
-        clinicAccess: ["pharmacy"],
-        status: "active",
-        joinedAt: now,
-        lastLoginAt: now,
-        createdBy: "system",
-      },
-      role: "pharmacist",
-    };
-  }
 
   const rows = await db<StaffMemberRow[]>`
     select

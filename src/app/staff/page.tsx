@@ -33,7 +33,7 @@ import type { QueueEntry } from "@/features/clinic/types";
 type StaffSessionData = {
   id: string;
   name: string;
-  role: "doctor" | "staff" | "pharmacist";
+  role: "doctor" | "staff";
   designation: string;
   clinicAccess: string[];
 };

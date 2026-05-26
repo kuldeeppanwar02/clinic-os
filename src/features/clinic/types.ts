@@ -46,8 +46,7 @@ export type QueueEntry = {
   notes?: string;
   provisionalToken?: string;
   provisionalBookingId?: string;
-  requiresPharmacyFollowUp?: boolean;
-  pharmacyStatus?: "not-needed" | "pending" | "done";
+
   isReportCheck?: boolean;
 };
 
@@ -81,7 +80,7 @@ export type CreateBookingInput = {
   mobile: string;
   clientRequestId?: string;
   createdAt?: string;
-  requiresPharmacyFollowUp?: boolean;
+
 };
 
 export type CreateWalkInInput = {
@@ -90,7 +89,7 @@ export type CreateWalkInInput = {
   mobile?: string;
   clientRequestId?: string;
   createdAt?: string;
-  requiresPharmacyFollowUp?: boolean;
+
 };
 
 export type QueueSummary = {

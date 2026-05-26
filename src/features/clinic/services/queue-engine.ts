@@ -77,10 +77,7 @@ export function createEmptyClinicState(clinicId: ClinicId): ClinicState {
     clinicName: clinic.title,
     clinicSubtitle: clinic.subtitle,
     clinicPrefix: clinic.prefix,
-    doctorMessage:
-      clinicId === "pharmacy"
-        ? "Medicines aur follow-up pickup ke liye token lein."
-        : "Appointment aur walk-in dono available hain.",
+    doctorMessage: "Appointment aur walk-in dono available hain.",
     lastUpdated: new Date().toISOString(),
     lastSyncedAt: new Date().toISOString(),
     queue: [],
@@ -125,10 +122,7 @@ export function createBookingState(
           status: "waiting",
           syncState: "synced",
           createdAt,
-          requiresPharmacyFollowUp: Boolean(input.requiresPharmacyFollowUp),
-          pharmacyStatus: input.requiresPharmacyFollowUp ? "pending" : "not-needed",
-          notes:
-            input.dayLabel === "Kal"
+          notes: input.dayLabel === "Kal"
               ? "Tomorrow booking saved for clinic review."
               : undefined,
         },
@@ -163,8 +157,6 @@ export function createBookingState(
         status: "waiting",
         syncState: "pending",
         createdAt,
-        requiresPharmacyFollowUp: Boolean(input.requiresPharmacyFollowUp),
-        pharmacyStatus: input.requiresPharmacyFollowUp ? "pending" : "not-needed",
         notes: "Offline provisional booking. Final token online sync par milega.",
       },
     ],
@@ -186,9 +178,7 @@ export function createWalkInState(
   if (options.online) {
     const finalNumber = getNextNumericToken(state.queue, clinic.prefix);
     const token = `${clinic.prefix}-${String(finalNumber).padStart(3, "0")}`;
-    const bookingId = `${clinic.id === "pharmacy" ? "RX" : "WI"}-${clinic.prefix}-${String(
-      finalNumber,
-    ).padStart(3, "0")}`;
+    const bookingId = `WI-${clinic.prefix}-${String(finalNumber).padStart(3, "0")}`;
 
     return touchState({
       ...state,
@@ -205,12 +195,10 @@ export function createWalkInState(
           mobile: normalizedMobile,
           source: "walk-in",
           dayLabel: "Aaj",
-          slotLabel: clinic.id === "pharmacy" ? "Pickup" : "Walk-in",
+          slotLabel: "Walk-in",
           status: "waiting",
           syncState: "synced",
           createdAt,
-          requiresPharmacyFollowUp: Boolean(input.requiresPharmacyFollowUp),
-          pharmacyStatus: input.requiresPharmacyFollowUp ? "pending" : "not-needed",
         },
       ],
     });
@@ -239,12 +227,10 @@ export function createWalkInState(
         mobile: normalizedMobile,
         source: "walk-in",
         dayLabel: "Aaj",
-        slotLabel: clinic.id === "pharmacy" ? "Pickup" : "Walk-in",
+        slotLabel: "Walk-in",
         status: "waiting",
         syncState: "pending",
         createdAt,
-        requiresPharmacyFollowUp: Boolean(input.requiresPharmacyFollowUp),
-        pharmacyStatus: input.requiresPharmacyFollowUp ? "pending" : "not-needed",
         notes: "Offline provisional walk-in. Final token online sync par milega.",
       },
     ],
@@ -452,7 +438,7 @@ export function getEntryPosition(state: ClinicState, entryId: string) {
 
   return {
     patientsAhead: Math.max(index, 0),
-    estimatedWaitMinutes: Math.max(index, 0) * (state.clinicId === "pharmacy" ? 5 : 12),
+    estimatedWaitMinutes: Math.max(index, 0) * 12,
   };
 }
 

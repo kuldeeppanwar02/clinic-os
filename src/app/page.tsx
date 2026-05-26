@@ -44,20 +44,30 @@ type TrustPoint = {
 };
 
 const TRUST_POINTS: Record<ClinicId, TrustPoint[]> = {
+  ortho: [
+    { label: "Expert Care", detail: "Joints & Bones", icon: Award },
+    { label: "Modern", detail: "Advanced Treatments", icon: ShieldCheck },
+    { label: "Recovery", detail: "Fast Rehab", icon: HeartPulse },
+  ],
   surgery: [
     { label: "10+ Years", detail: "Clinical Experience", icon: Award },
     { label: "ATLS", detail: "Trauma Certified", icon: ShieldCheck },
-    { label: "Jaisalmer", detail: "Specialist Surgical Care", icon: HeartPulse },
+    { label: "Renwal", detail: "Specialist Surgical Care", icon: HeartPulse },
   ],
-  dental: [
-    { label: "Dental Care", detail: "Appointments Available", icon: Award },
-    { label: "Family", detail: "Comfort-focused Visits", icon: ShieldCheck },
-    { label: "Daily", detail: "Clean & Guided Follow-up", icon: HeartPulse },
+  medicine: [
+    { label: "General", detail: "Health Care", icon: Award },
+    { label: "Diagnosis", detail: "Accurate & Fast", icon: ShieldCheck },
+    { label: "Treatment", detail: "Comprehensive", icon: HeartPulse },
   ],
-  pharmacy: [
-    { label: "Trusted", detail: "Post-consult Pickup", icon: Award },
-    { label: "Support", detail: "Follow-up Medicines", icon: ShieldCheck },
-    { label: "Daily", detail: "Easy Local Access", icon: HeartPulse },
+  urology: [
+    { label: "Specialist", detail: "Urological Care", icon: Award },
+    { label: "Advanced", detail: "Minimally Invasive", icon: ShieldCheck },
+    { label: "Care", detail: "Compassionate", icon: HeartPulse },
+  ],
+  anaesthesia: [
+    { label: "Safe", detail: "Pain Management", icon: Award },
+    { label: "Expert", detail: "Surgical Support", icon: ShieldCheck },
+    { label: "Monitoring", detail: "Continuous Care", icon: HeartPulse },
   ],
 };
 
@@ -65,8 +75,6 @@ function ClinicIcon({ id, className }: { id: string; className?: string }) {
   switch (id) {
     case "surgery":
       return <Stethoscope className={className} />;
-    case "pharmacy":
-      return <Pill className={className} />;
     default:
       return <CalendarCheck className={className} />;
   }
@@ -93,63 +101,7 @@ export default function HomePage() {
   const isLoggedIn = isDoctor || isStaff;
   const heroTitle = lang === "hi" ? "पंवार हेल्थ केयर" : "PANWAR HEALTH CARE";
 
-  // Pharmacy specific queue tracking
-  const [pharmacyReady, setPharmacyReady] = useState<{ token: string; name: string } | null>(null);
-  const [pharmacyWaitingCount, setPharmacyWaitingCount] = useState(0);
 
-  useEffect(() => {
-    if (activeClinicId !== "pharmacy") return;
-    
-    let mounted = true;
-    const fetchPharmacyRx = async () => {
-      try {
-        const res = await fetch("/api/prescriptions");
-        if (res.ok) {
-          const data = await res.json();
-          if (!mounted) return;
-          const rxList = data.prescriptions || [];
-          
-          // Only show those from surgical as requested: "bas surgical --> pharmacy ko hi kro"
-          // We can't strictly filter by origin clinic easily without checking prefix, so let's check prefix
-          const surgicalRx = rxList.filter((p: any) => p.tokenId.startsWith("S-") && p.status !== "collected");
-          
-          const readyList = surgicalRx
-            .filter((p: any) => p.status === "ready")
-            .sort((a: any, b: any) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
-            
-          const preparingList = surgicalRx.filter((p: any) => p.status === "preparing" || p.status === "sent");
-          
-          if (readyList.length > 0) {
-            // Show the oldest ready one (first in the list, assuming sorting is desc, so last in array)
-            // Wait, the API returns them ordered by created_at desc. So readyList[0] is the NEWEST ready.
-            // Let's show the NEWEST ready.
-            setPharmacyReady({ token: readyList[0].tokenId, name: readyList[0].patientName });
-          } else {
-            setPharmacyReady(null);
-          }
-          setPharmacyWaitingCount(preparingList.length);
-        }
-      } catch (e) {}
-    };
-
-    void fetchPharmacyRx();
-    
-    const channel = supabase
-      .channel(`rx_changes_home_${Math.random()}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "prescriptions" },
-        () => {
-          void fetchPharmacyRx();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      mounted = false;
-      void supabase.removeChannel(channel);
-    };
-  }, [activeClinicId]);
 
   return (
     <div className="page-shell">
@@ -186,26 +138,10 @@ export default function HomePage() {
         <div className="space-y-4">
           <QueueSnapshotCard
             clinic={activeClinic}
-            currentToken={
-              activeClinicId === "pharmacy"
-                ? (pharmacyReady?.token ?? "---")
-                : (summary.current?.token ?? `${activeClinic.prefix}-000`)
-            }
-            nextToken={
-              activeClinicId === "pharmacy"
-                ? "--"
-                : (summary.next?.token ?? "--")
-            }
-            waitingCount={
-              activeClinicId === "pharmacy"
-                ? pharmacyWaitingCount
-                : summary.waiting.length
-            }
-            currentName={
-              activeClinicId === "pharmacy"
-                ? (pharmacyReady?.name ?? (pharmacyWaitingCount > 0 ? t("prescription", "preparing") || "Preparing..." : "Queue preparing"))
-                : (summary.current?.name ?? "Queue preparing")
-            }
+            currentToken={summary.current?.token ?? `${activeClinic.prefix}-000`}
+            nextToken={summary.next?.token ?? "--"}
+            waitingCount={summary.waiting.length}
+            currentName={summary.current?.name ?? "Queue preparing"}
             t={t}
           />
 
@@ -540,7 +476,7 @@ function FocusedClinicCard({
 
         {!isLoggedIn && (
           <div className="mt-6 space-y-3">
-            {clinic.hasBooking ? (
+            {clinic.hasBooking && (
               <div className="grid gap-3 sm:grid-cols-1">
                 {/* PRIMARY ACTION: Walk-in Token (For users at the clinic) */}
                 {isWalkInDisabled ? (
@@ -596,47 +532,10 @@ function FocusedClinicCard({
                   </div>
                 </Link>
               </div>
-            ) : (
-              <div className="grid gap-3 sm:grid-cols-1">
-                <Link href={buildClinicHref("/walkin", clinic.id)} className="flex items-center gap-4 rounded-[1.8rem] bg-[linear-gradient(145deg,#23c965,#1cb056)] p-3 pr-5 shadow-[0_12px_24px_rgba(35,201,101,0.25)] transition-transform hover:-translate-y-1 active:scale-95 text-white">
-                  <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.4rem] bg-[rgba(255,255,255,0.2)] shadow-inner">
-                    <Ticket className="h-8 w-8" />
-                  </div>
-                  <div className="flex-1 text-left min-w-0 py-1">
-                    <p className="text-[1.35rem] font-bold leading-tight">{t("home", "walkinBtn")}</p>
-                    <p className="mt-0.5 text-sm font-medium text-[rgba(255,255,255,0.9)] truncate">फार्मेसी के लिए टोकन</p>
-                  </div>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(255,255,255,0.2)]">
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                </Link>
-
-                <Link href={buildClinicHref("/live", clinic.id)} className="flex items-center gap-4 rounded-[1.8rem] border border-[rgba(12,86,81,0.06)] bg-white p-3 pr-5 shadow-[0_8px_20px_rgba(30,27,19,0.04)] transition-transform hover:-translate-y-1 active:scale-95 text-[#17130f]">
-                  <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.4rem] bg-[#f0f5ff] text-[#2c61fb]">
-                    <Clock className="h-8 w-8" />
-                  </div>
-                  <div className="flex-1 text-left min-w-0 py-1">
-                    <p className="text-[1.35rem] font-bold leading-tight">{t("home", "liveQueue")}</p>
-                    <p className="mt-0.5 text-sm font-medium text-[rgba(19,49,58,0.52)] truncate">अस्पताल की कतार देखें (Queue)</p>
-                  </div>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(19,49,58,0.04)]">
-                    <ArrowRight className="h-4 w-4 text-[rgba(19,49,58,0.4)]" />
-                  </div>
-                </Link>
-              </div>
             )}
-          </div>
-        )}
-
-
-        {!clinic.hasBooking && (
-          <div className="mt-5 flex items-center gap-2 rounded-xl bg-[var(--accent-soft)] px-3 py-2">
-            <Pill className="h-4 w-4 text-[var(--accent)]" />
-            <p className="text-xs font-medium text-[var(--accent-strong)]">{t("pharmacy", "noBookingNeeded")}</p>
           </div>
         )}
       </div>
     </div>
-
   );
 }

@@ -34,7 +34,7 @@ import { usePWAInstall } from "@/lib/use-pwa";
 type StaffSession = {
   id: string;
   name: string;
-  role: "doctor" | "staff" | "pharmacist";
+  role: "doctor" | "staff";
   designation: string;
   clinicAccess: string[];
 } | null;
@@ -107,7 +107,6 @@ export function Navbar() {
   };
 
   const isDoctor = session?.role === "doctor";
-  const isPharmacist = session?.role === "pharmacist";
 
   /* Patient links */
   const patientLinks = [
@@ -124,20 +123,17 @@ export function Navbar() {
   const staffQuickNav = session
     ? [
         { href: "/", label: t("nav", "home"), icon: Home },
-        ...(isPharmacist
-          ? [{ href: "/pharmacy", label: t("nav", "pharmacy") || "Pharmacy", icon: Pill }]
-          : [{ href: "/staff", label: t("nav", "staff"), icon: LayoutDashboard }]),
+        { href: "/staff", label: t("nav", "staff"), icon: LayoutDashboard },
         { href: "/live", label: t("nav", "live"), icon: Monitor },
         ...(isDoctor
           ? [
-              { href: "/pharmacy", label: t("nav", "pharmacy") || "Pharmacy", icon: Pill },
               { href: "/staff/schedule", label: t("nav", "schedule"), icon: CalendarDays },
               { href: "/staff/manage", label: t("nav", "staffMgmt"), icon: Users },
               { href: "/staff/reports", label: t("nav", "reports") || "Reports", icon: BarChart },
               { href: "/staff/settings", label: "Settings", icon: Hospital },
             ]
           : []),
-        ...(!isPharmacist && !isDoctor
+        ...(!isDoctor
           ? [
               { href: "/staff/schedule", label: t("nav", "schedule"), icon: CalendarDays },
               { href: "/staff/reports", label: t("nav", "reports") || "Reports", icon: BarChart },

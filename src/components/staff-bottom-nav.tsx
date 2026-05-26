@@ -48,7 +48,6 @@ export function StaffBottomNav() {
   if (!session) return null;
 
   const isDoctor = session.role === "doctor";
-  const isPharmacist = session.role === "pharmacist";
 
   const handleLogout = async () => {
     try {
@@ -66,17 +65,10 @@ export function StaffBottomNav() {
     return pathname.startsWith(path) && path !== "/";
   };
 
-  // Main 3 icons based on role
   const mainNav = [
     { href: "/", label: t("nav", "home"), icon: Home },
-    ...(isPharmacist
-      ? [{ href: "/pharmacy", label: t("nav", "pharmacy") || "Pharmacy", icon: Pill }]
-      : [{ href: "/staff", label: t("nav", "staff"), icon: LayoutDashboard }]),
-    ...(isDoctor
-      ? [{ href: "/staff/schedule", label: t("nav", "schedule"), icon: CalendarDays }]
-      : !isPharmacist 
-        ? [{ href: "/staff/schedule", label: t("nav", "schedule"), icon: CalendarDays }]
-        : []),
+    { href: "/staff", label: t("nav", "staff"), icon: LayoutDashboard },
+    { href: "/staff/schedule", label: t("nav", "schedule"), icon: CalendarDays },
   ];
 
   return (
@@ -144,14 +136,7 @@ export function StaffBottomNav() {
             <div className="grid grid-cols-2 gap-3 mb-6">
               {isDoctor && (
                 <>
-                  <Link
-                    href={buildClinicHref("/pharmacy", activeClinicId)}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex flex-col items-center gap-2 rounded-2xl bg-white p-4 shadow-sm border border-[rgba(19,49,58,0.05)] transition-colors hover:bg-[rgba(15,107,99,0.05)]"
-                  >
-                    <Pill className="h-6 w-6 text-[var(--accent)]" />
-                    <span className="text-xs font-bold text-[rgba(19,49,58,0.8)]">Pharmacy</span>
-                  </Link>
+
                   <Link
                     href={buildClinicHref("/staff/manage", activeClinicId)}
                     onClick={() => setMenuOpen(false)}
@@ -170,7 +155,6 @@ export function StaffBottomNav() {
                   </Link>
                 </>
               )}
-              {(!isPharmacist) && (
                 <Link
                   href={buildClinicHref("/staff/reports", activeClinicId)}
                   onClick={() => setMenuOpen(false)}
@@ -179,7 +163,6 @@ export function StaffBottomNav() {
                   <BarChart className="h-6 w-6 text-[var(--accent)]" />
                   <span className="text-xs font-bold text-[rgba(19,49,58,0.8)]">Reports</span>
                 </Link>
-              )}
             </div>
 
             {/* Developer Section */}

@@ -231,7 +231,6 @@ export const clinicService = {
             provisionalToken: entry.provisionalToken,
             provisionalBookingId: entry.provisionalBookingId,
             createdAt: entry.createdAt,
-            requiresPharmacyFollowUp: entry.requiresPharmacyFollowUp,
           })),
           },
         );

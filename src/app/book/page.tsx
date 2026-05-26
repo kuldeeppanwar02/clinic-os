@@ -138,7 +138,7 @@ export default function BookPage() {
   const [dayLabel, setDayLabel] = useState<"Aaj" | "Kal">("Aaj");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
-  const [requiresPharmacyFollowUp, setRequiresPharmacyFollowUp] = useState(false);
+
   const [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -274,7 +274,6 @@ export default function BookPage() {
         slotLabel: selectedSlot,
         name,
         mobile: mobile.trim() || "",
-        requiresPharmacyFollowUp,
       });
       const latestEntry = nextState.queue[nextState.queue.length - 1];
       setConfirmation({
@@ -580,13 +579,7 @@ export default function BookPage() {
                   </label>
                 </div>
 
-                <label className="card flex items-center gap-2.5 px-3 py-2.5 text-sm text-[rgba(19,49,58,0.65)] cursor-pointer">
-                  <input type="checkbox" checked={requiresPharmacyFollowUp}
-                    onChange={(e) => setRequiresPharmacyFollowUp(e.target.checked)}
-                    className="h-4 w-4 accent-[var(--accent)]" />
-                  <Pill className="h-4 w-4 text-[var(--accent)]" />
-                  {t("booking", "pharmacyFollowUp")}
-                </label>
+
 
                 {error && (
                   <div className="flex items-center gap-2 rounded-xl bg-[var(--danger-soft)] px-3 py-2">

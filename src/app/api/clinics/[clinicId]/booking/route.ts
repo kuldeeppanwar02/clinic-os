@@ -16,7 +16,6 @@ export async function POST(
       mobile?: string;
       clientRequestId?: string;
       createdAt?: string;
-      requiresPharmacyFollowUp?: boolean;
     };
 
     if (!body.dayLabel || !body.slotLabel || !body.name?.trim()) {
@@ -31,7 +30,6 @@ export async function POST(
       mobile: body.mobile ?? "",
       clientRequestId: body.clientRequestId,
       createdAt: body.createdAt,
-      requiresPharmacyFollowUp: body.requiresPharmacyFollowUp,
     });
 
     return Response.json({ state });

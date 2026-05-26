@@ -26,18 +26,26 @@ export const serverEnv = {
 
   // Per-clinic doctor config
   doctors: {
+    ortho: {
+      pin: process.env.DOCTOR_PIN_ORTHO?.trim() ?? "",
+      name: process.env.DOCTOR_NAME_ORTHO?.trim() ?? "Dr. Kuldeep Panwar",
+    },
     surgery: {
       pin: process.env.DOCTOR_PIN_SURGERY?.trim() ?? "",
-      name: process.env.DOCTOR_NAME_SURGERY?.trim() ?? "Dr. Satta Ram Panwar",
+      name: process.env.DOCTOR_NAME_SURGERY?.trim() ?? "Dr. M L Didel",
     },
-    dental: {
-      pin: process.env.DOCTOR_PIN_DENTAL?.trim() ?? "",
-      name: process.env.DOCTOR_NAME_DENTAL?.trim() ?? "Dr. Dhawna Dhande",
+    medicine: {
+      pin: process.env.DOCTOR_PIN_MEDICINE?.trim() ?? "",
+      name: process.env.DOCTOR_NAME_MEDICINE?.trim() ?? "Dr. Rajesh Bochaliya",
     },
-  },
-  pharmacy: {
-    pin: process.env.PHARMACY_PIN?.trim() ?? "",
-    name: process.env.PHARMACY_NAME?.trim() ?? "Dhanwantri Medical",
+    urology: {
+      pin: process.env.DOCTOR_PIN_UROLOGY?.trim() ?? "",
+      name: process.env.DOCTOR_NAME_UROLOGY?.trim() ?? "Dr. Nishkarsh Mehta",
+    },
+    anaesthesia: {
+      pin: process.env.DOCTOR_PIN_ANAESTHESIA?.trim() ?? "",
+      name: process.env.DOCTOR_NAME_ANAESTHESIA?.trim() ?? "Dr. Pankaj Saini",
+    },
   },
 };
 
