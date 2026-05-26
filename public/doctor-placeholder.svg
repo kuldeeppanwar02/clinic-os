@@ -1,0 +1,24 @@
+<svg width="720" height="860" viewBox="0 0 720 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="860" rx="52" fill="#F8F0E1"/>
+  <rect x="36" y="36" width="648" height="788" rx="40" fill="url(#paint0_linear_18_4)"/>
+  <circle cx="360" cy="224" r="88" fill="#F2C49C"/>
+  <path d="M245 391C245 322.517 300.517 267 369 267H371C439.483 267 495 322.517 495 391V501H245V391Z" fill="#143F47"/>
+  <path d="M184 566C184 491.441 244.441 431 319 431H401C475.559 431 536 491.441 536 566V756H184V566Z" fill="#FFFDF8"/>
+  <path d="M319 431H401L445 756H275L319 431Z" fill="#E8E0D4"/>
+  <path d="M298 484H422L467 756H253L298 484Z" fill="#FFFFFF"/>
+  <path d="M342 481H378V756H342V481Z" fill="#D4CDC4"/>
+  <rect x="312" y="514" width="96" height="114" rx="18" fill="#0F6B63"/>
+  <path d="M214 690H506" stroke="#0F6B63" stroke-width="16" stroke-linecap="round"/>
+  <text x="360" y="96" fill="#0A4E53" font-family="Georgia, serif" font-size="30" font-weight="700" text-anchor="middle">
+    Replace with doctor photo
+  </text>
+  <text x="360" y="790" fill="#0A4E53" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">
+    Dr. Satta Ram Panwar
+  </text>
+  <defs>
+    <linearGradient id="paint0_linear_18_4" x1="360" y1="36" x2="360" y2="824" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="1" stop-color="#F3E6D6"/>
+    </linearGradient>
+  </defs>
+</svg>
